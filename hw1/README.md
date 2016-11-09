@@ -16,7 +16,8 @@ sudo chmod 666 /dev/hw0 (change file type)
 ```
 tail /var/log/messages (display last few lines)
 cat /dev/hw0 (read data from device)
-echo abc > /dev/hw0 (send data to device check in tail. 0 off, 1 on)
+echo 1 > /dev/hw0
+echo 0 > /dev/hw0
 ```
 
 ##Remove

@@ -8,7 +8,7 @@
 
 //module information
 MODULE_AUTHOR("JOSHUA");
-MODULE_DESCRIPTION("driver for PSD control");
+MODULE_DESCRIPTION("driver for linetracer control");
 MODULE_LICENSE("GPL");
 MODULE_VERSION("0.1");
 
@@ -18,31 +18,20 @@ static struct cdev cdv; //structure character device info
 static struct class *cls = NULL; //structure class info
 static volatile u32 *gpio_base = NULL; //array for mapping address
 static unsigned int gpioPI =21;
-
-//function to execute when device file is read (ex cat)
-static ssize_t sushi_read(struct file* flip, char* buf, size_t count, loff_t* pos){
-	int size = 0;
-	char sushi[] = {0xF0, 0x9F, 0x8D, 0xA3, 0x0A}; //binary for drawing sushi
-	//int vall = gpio_get_value(gpioTest);
-	if(copy_to_user(buf+size, (const char *)sushi, sizeof(sushi))){ //send from kernel to user
-		printk(KERN_INFO, "sushi: copy_to_user\n");
-		return -EFAULT;
-	}
-	size += sizeof(sushi);
-	return size;
-}
+static unsigned int gpioMT = 20;
 
 //tomosoft.jp/design/?p=5521
 //function to execute when device file is read (gpio)
 static ssize_t pi_read(struct file* flip, char* buf, size_t count, loff_t* pos){
 	char byte;
+	int size = 0;
 	byte = '0'+gpio_get_value(gpioPI);
 	put_user(byte,buf);
 	return 1;
 }
 
 //function to execute when device file is writing
-static ssize_t led_write(struct file* flip, const char* buf, size_t count, loff_t* pos){
+static ssize_t motor_write(struct file* flip, const char* buf, size_t count, loff_t* pos){
 	//printk(KERN_INFO "led_write is called \n"); //just to check if properly called
 	char c; //variable to read input text
 	if (copy_from_user(&c, buf, sizeof(char))){ //receive from user to kernel
@@ -53,11 +42,11 @@ static ssize_t led_write(struct file* flip, const char* buf, size_t count, loff_
 	//if 0 off, 1 on for led
 	if (c=='0'){
 		//gpio_base[10] = 1 << 25;
-		gpio_base[10] = 1 << 21;
+		gpio_base[10] = 1 << gpioMT;
 	}
 	else if(c == '1'){
 		//gpio_base[7] = 1 << 25;
-		gpio_base[7] = 1 << 21;
+		gpio_base[7] = 1 << gpioMT;
 	}
 
 	return 1; //return number when called
@@ -66,9 +55,8 @@ static ssize_t led_write(struct file* flip, const char* buf, size_t count, loff_
 //structure
 static struct file_operations led_fops = {
 	.owner = THIS_MODULE,	//define owner, register to kernel
-	.write = led_write,	//if write occur, call the led_write function
-//	.read  = sushi_read //if read occur, call sushi_read function
-	.read = pi_read,
+	.write = motor_write,	//if write occur, call the motor_write function
+	.read = pi_read,		//if read occur, call the pi_read function   
 };
 
 //initial function when loaded
@@ -78,7 +66,7 @@ static int __init init_mod(void)
 	int retval;
 
 	gpio_base = ioremap_nocache(0x3f200000, 0xA0); //bind this address(to 0xA0 range) to gpio_base variable to make call easier
-	const u32 led = 21;//25; //use GPIO25
+	const u32 led = gpioMT;//25; //use GPIO25
 	const u32 index = led/10; //GPFSEL2
 	const u32 shift = (led%10)*3; //15bit
 	const u32 mask = ~(0x7 << shift); //1111111111111100011111111111111 .etc
