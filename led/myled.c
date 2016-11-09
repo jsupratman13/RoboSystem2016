@@ -40,10 +40,12 @@ static ssize_t led_write(struct file* flip, const char* buf, size_t count, loff_
 	
 	//if 0 off, 1 on for led
 	if (c=='0'){
-		gpio_base[10] = 1 << 25;
+		//gpio_base[10] = 1 << 25;
+		gpio_base[10] = 1 << 8;
 	}
 	else if(c == '1'){
-		gpio_base[7] = 1 << 25;
+		//gpio_base[7] = 1 << 25;
+		gpio_base[7] = 1 << 8;
 	}
 
 	return 1; //return number when called
@@ -63,7 +65,7 @@ static int __init init_mod(void)
 	int retval;
 
 	gpio_base = ioremap_nocache(0x3f200000, 0xA0); //bind this address(to 0xA0 range) to gpio_base variable to make call easier
-	const u32 led = 25; //use GPIO25
+	const u32 led = 8;//25; //use GPIO25
 	const u32 index = led/10; //GPFSEL2
 	const u32 shift = (led%10)*3; //15bit
 	const u32 mask = ~(0x7 << shift); //1111111111111100011111111111111 .etc
