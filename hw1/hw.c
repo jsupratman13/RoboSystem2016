@@ -17,8 +17,8 @@ static dev_t dev; //define device variable
 static struct cdev cdv; //structure character device info
 static struct class *cls = NULL; //structure class info
 static volatile u32 *gpio_base = NULL; //array for mapping address
-static unsigned int gpioPI =21;
-static unsigned int gpioMT = 20;
+static unsigned int gpioPI =21;	//photo interrupter gpio
+static unsigned int gpioMT = 12;	//motor gpio
 
 //tomosoft.jp/design/?p=5521
 //function to execute when device file is read (gpio)
@@ -41,11 +41,9 @@ static ssize_t motor_write(struct file* flip, const char* buf, size_t count, lof
 	
 	//if 0 off, 1 on for led
 	if (c=='0'){
-		//gpio_base[10] = 1 << 25;
 		gpio_base[10] = 1 << gpioMT;
 	}
 	else if(c == '1'){
-		//gpio_base[7] = 1 << 25;
 		gpio_base[7] = 1 << gpioMT;
 	}
 
@@ -65,8 +63,9 @@ static int __init init_mod(void)
 	//get device number
 	int retval;
 
+	//set up gpio write
 	gpio_base = ioremap_nocache(0x3f200000, 0xA0); //bind this address(to 0xA0 range) to gpio_base variable to make call easier
-	const u32 led = gpioMT;//25; //use GPIO25
+	const u32 led = gpioMT; //use GPIO25
 	const u32 index = led/10; //GPFSEL2
 	const u32 shift = (led%10)*3; //15bit
 	const u32 mask = ~(0x7 << shift); //1111111111111100011111111111111 .etc
@@ -79,7 +78,7 @@ static int __init init_mod(void)
 	}
 	printk(KERN_INFO "%s is loaded. major:%d\n", __FILE__,MAJOR(dev)); //macro function and returns device number
 	
-
+	//set up gpio read
 	printk(KERN_INFO "GPIO_TEST\n");
 	if(!gpio_is_valid(gpioPI)){
 		printk(KERN_INFO "INVALID gpioTest\n");
