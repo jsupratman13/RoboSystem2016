@@ -5,20 +5,24 @@
 
 ##Description
 * write to /dev/hw0 to move or stop motor
+
+https://youtu.be/tuo7rsRTKzc
 ```
 echo 1 > /dev/hw0
 echo 0 > /dev/hw0
 ```
 * read from /dev/hw0 to get line tracer value
+
+https://youtu.be/hUCr6ruUITk
 ```
 cat /dev/hw0
 ```
 * run test.py to see motor responding to line tracer
+
+https://youtu.be/udwZdQsYrcE
 ```
 python test.py
 ```
-
-##Video
 
 ##Installation
 ```
