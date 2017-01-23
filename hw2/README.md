@@ -17,6 +17,11 @@ rosrun hw2 JoyControlRoomba
 ##Prerequisite
 * Ubuntu 16.04 on raspberry pi 3
 * ROS installed in raspberry pi 3
+* install joystick controller driver ROS package
+```
+sudo apt update
+sudo apt install ros-kinetic-joy
+```
 * install roomba driver ROS package
 ```
 git clone https://github.com/NetBUG/cereal_port
