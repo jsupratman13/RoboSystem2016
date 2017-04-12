@@ -1,9 +1,9 @@
-#Homework 2
+# Homework 2
 * create a demonstration with raspberry pi using ROS
 * show video on youtube
 * upload source code on github
 
-##Description
+## Description
 * controlling roomba using joystick controller via Raspberry pi and ROS<br \>
 https://youtu.be/xJhtPAgWQ4Q
 
@@ -14,7 +14,7 @@ rosrun roomba_500_series roomba500_light_node &
 rosrun hw2 JoyControlRoomba
 ```
 
-##Prerequisite
+## Prerequisite
 * Ubuntu 16.04 on raspberry pi 3
 * ROS installed in raspberry pi 3
 * install joystick controller driver ROS package
