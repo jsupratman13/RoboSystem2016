@@ -4,7 +4,7 @@
 * upload source code on github
 
 ## Description
-* controlling roomba using joystick controller via Raspberry pi and ROS<br \>
+* controlling roomba using joystick controller via Raspberry pi and ROS <br \>
 https://youtu.be/xJhtPAgWQ4Q
 
 ```
