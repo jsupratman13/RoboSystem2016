@@ -1,9 +1,9 @@
-#Homework 1
+# Homework 1
 * modify device driver program
 * show video on youtube
 * upload source code on github
 
-##Description
+## Description
 * write to /dev/hw0 to move or stop motor<br /> 
 https://youtu.be/tuo7rsRTKzc
 ```
@@ -21,7 +21,7 @@ https://youtu.be/udwZdQsYrcE
 python test.py
 ```
 
-##Installation
+## Installation
 ```
 make (compile)
 sudo insmod hw.ko
@@ -30,7 +30,7 @@ sudo chmod 666 /dev/hw0 (change file type)
 
 ```
 
-##Check
+## Check
 ```
 tail /var/log/messages (display last few lines)
 cat /dev/hw0 (read data from device)
@@ -38,7 +38,7 @@ echo 1 > /dev/hw0
 echo 0 > /dev/hw0
 ```
 
-##Remove
+## Remove
 ```
 sudo rm /dev/hw0 (remove files)
 sudo rmmod hw0 (remove module)
